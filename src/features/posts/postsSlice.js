@@ -1,8 +1,8 @@
 // we can use reduxjs/toolkit nanoid to generate a random id, we do not need import a uuid npm package
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
-const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 import axios from "axios";
+const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 
 const initialState = {
   posts: [],
@@ -16,6 +16,14 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   const response = await axios.get(POSTS_URL);
   return response.data;
 });
+
+export const addNewPost = createAsyncThunk(
+  "posts/addNewPost",
+  async (initialPost) => {
+    const response = await axios.post(POSTS_URL, initialPost);
+    return response.data;
+  }
+);
 
 const postsSlice = createSlice({
   name: "posts",
@@ -86,7 +94,7 @@ const postsSlice = createSlice({
       .addCase(addNewPost.fulfilled, (state, action) => {
         // Fix for API post IDs:
         // Creating sortedPosts & assigning the id
-        // would be not be needed if the fake API
+        // would be nt be needed if the fake API
         // returned accurate new post IDs
         const sortedPosts = state.posts.sort((a, b) => {
           if (a.id > b.id) return 1;
@@ -100,10 +108,10 @@ const postsSlice = createSlice({
         action.payload.date = new Date().toISOString();
         action.payload.reactions = {
           thumbsUp: 0,
-          hooray: 0,
+          wow: 0,
           heart: 0,
           rocket: 0,
-          eyes: 0,
+          coffee: 0,
         };
         console.log(action.payload);
         state.posts.push(action.payload);
