@@ -3,20 +3,24 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { addNewPost } from "./postsSlice";
 import { selectAllUsers } from "../users/usersSlice";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 
 const AddPostForm = () => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [userId, setuserId] = useState("");
+  const [userId, setUserId] = useState("");
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
 
   const users = useSelector(selectAllUsers);
 
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onContentChanged = (e) => setContent(e.target.value);
-  const onAuthorChanged = (e) => setuserId(e.target.value);
+  const onAuthorChanged = (e) => setUserId(e.target.value);
 
   const canSave =
     [title, content, userId].every(Boolean) && addRequestStatus === "idle";
@@ -30,7 +34,8 @@ const AddPostForm = () => {
 
         setTitle("");
         setContent("");
-        setuserId("");
+        setUserId("");
+        navigate("/");
       } catch (err) {
         console.error("Failed to save the post", err);
       } finally {
@@ -65,8 +70,8 @@ const AddPostForm = () => {
           {usersOptions}
         </select>
 
-        <label htmlFor="postContent">Post Content:</label>
-        <input
+        <label htmlFor="postContent">Content:</label>
+        <textarea
           type="text"
           id="postContent"
           name="postContent"
