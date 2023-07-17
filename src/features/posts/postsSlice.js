@@ -1,5 +1,9 @@
 // we can use reduxjs/toolkit nanoid to generate a random id, we do not need import a uuid npm package
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 import axios from "axios";
 const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
@@ -156,6 +160,11 @@ export const getCount = (state) => state.posts.count;
 
 export const selectPostById = (state, postId) =>
   state.posts.posts.find((post) => post.id === postId);
+
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state, userId) => userId],
+  (posts, userId) => posts.filter((post) => post.userId === userId)
+);
 
 export const { increaseCount, reactionAdded } = postsSlice.actions;
 
